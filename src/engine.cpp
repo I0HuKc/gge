@@ -5,48 +5,37 @@
 
 #include <iostream>
 
+#include "window/Events.h"
+#include "window/Window.h"
+
 int WIDTH = 1280;
 int HEIGHT = 720;
 
 int main(int argc, char const* argv[]) {
-  glfwInit();
-  // Указываю параметры окна
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+  // инициализация окна
+  Window::initialize(WIDTH, HEIGHT, "GGE Development");
+  // инициализация системы Events
+  Events::initialize();
 
-  // Создаю окно
-  GLFWwindow* window =
-      glfwCreateWindow(WIDTH, HEIGHT, "GGE Development", nullptr, nullptr);
-  if (window == nullptr) {
-    std::cerr << "Ошибка создания GLFW окна." << std::endl;
-    // Освобождение всех ресурсов
-    glfwTerminate();
-    return -1;
-  }
+  glClearColor(0.207f, 0.59f, 0.99f, 1);
+  while (!Window::isShouldClose()) {
+    Events::pollEvents();
+    if (Events::justPressed(GLFW_KEY_ESCAPE)) {
+      Window::setShouldClose(true);
+    }
 
-  // Указываю текущий контекст
-  glfwMakeContextCurrent(window);
+    // тестирование обработки нажатия мышки
+    if (Events::justClicked(GLFW_MOUSE_BUTTON_1)) {
+      glClearColor(0.100f, 0.43f, 0.100f, 1);
+    }
 
-  glewExperimental = GL_TRUE;
-  if (glewInit() != GLEW_OK) {
-    std::cerr << "Ошибка инициализации GLEW" << std::endl;
-    return -1;
-  }
+    glClear(GL_COLOR_BUFFER_BIT);
 
-  // Рендеринг
-  glViewport(0, 0, WIDTH, HEIGHT);
-
-  while (!glfwWindowShouldClose(window)) {
-    // Подключаю все события
-    glfwPollEvents();
-    // Вызов смены буффера
-    glfwSwapBuffers(window);
+    Window::swapBuffers();
   }
 
   // Освобождение всех ресурсов
-  glfwTerminate();
+  Window::terminate();
 
   return 0;
 }
