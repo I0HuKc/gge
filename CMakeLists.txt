@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0)
 project(gge VERSION 1.0)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
+
 find_package(PkgConfig REQUIRED)
 
 pkg_search_module(GLFW REQUIRED glfw3)
@@ -9,7 +11,10 @@ pkg_search_module(GL REQUIRED glew)
 include_directories(${GLFW_INCLUDE_DIRS})
 
 file(GLOB
-        CPPS "src/*.cpp")
+        CPPS 
+        "src/*.cpp" 
+        "src/window/*.cpp"
+    )
 
 add_executable(
     ${PROJECT_NAME} src/engine.cpp 
