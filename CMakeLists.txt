@@ -14,6 +14,7 @@ file(GLOB
         CPPS 
         "src/*.cpp" 
         "src/window/*.cpp"
+        "src/graphics/*.cpp"
     )
 
 add_executable(
