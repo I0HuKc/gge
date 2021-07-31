@@ -14,7 +14,6 @@ find_package(PNG REQUIRED)
 pkg_search_module(GLFW REQUIRED glfw3)
 pkg_search_module(GL REQUIRED glew)
 
-
 include_directories(${PNG_INCLUDE_DIR})
 include_directories(${GLFW_INCLUDE_DIRS})
 
