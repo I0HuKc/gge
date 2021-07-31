@@ -1,5 +1,6 @@
 #include "Events.h"
 
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <string.h>
 
@@ -16,6 +17,13 @@ float Events::y = 0.0f;
 
 bool Events::_cursor_locked = false;
 bool Events::_cursor_started = false;
+
+// для корректного масштабирования окна
+void WindowSizeCallbak(GLFWwindow* window, int width, int height) {
+  glViewport(0, 0, width, height);
+  Window::width = width;
+  Window::height = height;
+}
 
 // для курсора
 void CursorPositionCallback(GLFWwindow* window, double Xpos, double Ypos) {
@@ -66,6 +74,7 @@ int Events::initialize() {
   glfwSetKeyCallback(window, KeyCallback);  // клавиатура
   glfwSetMouseButtonCallback(window, MouseButtonCallback);   // мышка
   glfwSetCursorPosCallback(window, CursorPositionCallback);  // курсор
+  glfwSetWindowSizeCallback(window, WindowSizeCallbak);
 
   return 0;
 }
@@ -105,4 +114,10 @@ bool Events::isClicked(int button) {
 bool Events::justClicked(int button) {
   int index = _MOUSE_BUTTONS + button;
   return _keys[index] && _frames[index] == _current;
+}
+
+void Events::toogleCursor() {
+  _cursor_locked = !_cursor_locked;
+  Window::setCursorMode(_cursor_locked ? GLFW_CURSOR_DISABLED
+                                       : GLFW_CURSOR_NORMAL);
 }

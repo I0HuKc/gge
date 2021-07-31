@@ -44,6 +44,9 @@ class Events {
 
   // зажата ли кнопка МЫШКИ только-что
   static bool justClicked(int button);
+
+  // переключение состояния курсора
+  static void toogleCursor();
 };
 
 #endif
