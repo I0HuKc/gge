@@ -1,6 +1,7 @@
 #ifndef GRAPHICS_SHADER_H
 #define GRAPHICS_SHADER_H
 
+#include <glm/glm.hpp>
 #include <string>
 
 class Shader {
@@ -10,6 +11,8 @@ class Shader {
   ~Shader();
 
   void use();
+  // метод для отправки матрицы шейдеру
+  void uniformMatrix(std::string name, glm::mat4 matrix);
 };
 
 // Метод загрузки шейдера
