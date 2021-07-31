@@ -5,6 +5,8 @@ class GLFWwindow;
 
 class Window {
  public:
+  static int width;
+  static int height;
   static GLFWwindow* window;
 
   static int initialize(int width, int height, const char* title);
@@ -18,6 +20,9 @@ class Window {
 
   // Закрыть окно
   static void setShouldClose(bool flag);
+
+  // установить режим курсора
+  static void setCursorMode(int mode);
 };
 
 #endif
