@@ -1,15 +1,13 @@
 #include "Camera.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/transform.hpp>
-
 #include "Window.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 Camera::Camera(glm::vec3 position, float fov)
     : position(position), fov(fov), rotation(1.0f) {
   updateVectors();
 }
-Camera::~Camera() {}
 
 void Camera::updateVectors() {
   front = glm::vec3(rotation * glm::vec4(0, 0, -1, 1));

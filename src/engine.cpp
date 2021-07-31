@@ -4,7 +4,6 @@
 #define GLEW_STATIC
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 #include <iostream>
 
@@ -19,7 +18,6 @@ int WIDTH = 1280;
 int HEIGHT = 720;
 
 float vertices[] = {
-    // x    y     z     u     v
     -1.0f, -1.0f, 0.0f,  0.0f, 0.0f, 1.0f, -1.0f, 0.0f,
     1.0f,  0.0f,  -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
 
@@ -73,7 +71,7 @@ int main(int argc, char const* argv[]) {
   glClearColor(0.6f, 0.62f, 0.65f, 1);
 
   // включаю смешивание для корректной прозрачности
-  // glEnable(GL_CULL_FACE);
+  glEnable(GL_CULL_FACE);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -90,12 +88,12 @@ int main(int argc, char const* argv[]) {
   float camX = 0.0f;
   float camY = 0.0f;
 
-  float speed = 5;
   while (!Window::isShouldClose()) {
     // стабилизация FPS
     float currentTime = glfwGetTime();
     delta = currentTime - lastTime;
     lastTime = currentTime;
+
     if (Events::justPressed(GLFW_KEY_ESCAPE)) {
       Window::setShouldClose(true);
     }
@@ -106,16 +104,16 @@ int main(int argc, char const* argv[]) {
 
     // управление камерой с клавиатуры
     if (Events::isPressed(GLFW_KEY_W)) {
-      camera->position += camera->front * delta * speed;
+      camera->position += camera->front * delta * 20.0f;
     }
     if (Events::isPressed(GLFW_KEY_S)) {
-      camera->position -= camera->front * delta * speed;
+      camera->position -= camera->front * delta * 20.0f;
     }
     if (Events::isPressed(GLFW_KEY_D)) {
-      camera->position += camera->right * delta * speed;
+      camera->position += camera->right * delta * 3.0f;
     }
     if (Events::isPressed(GLFW_KEY_A)) {
-      camera->position -= camera->right * delta * speed;
+      camera->position -= camera->right * delta * 3.0f;
     }
 
     if (Events::_cursor_locked) {
@@ -125,11 +123,11 @@ int main(int argc, char const* argv[]) {
       if (camY < -glm::radians(89.0f)) {
         camY = -glm::radians(89.0f);
       }
-      if (camY > -glm::radians(89.0f)) {
-        camY = -glm::radians(89.0f);
+      if (camY > glm::radians(89.0f)) {
+        camY = glm::radians(89.0f);
       }
 
-      camera->rotation = -glm::mat4(1.0f);
+      camera->rotation = glm::mat4(1.0f);
       camera->rotate(camY, camX, 0);
     }
 

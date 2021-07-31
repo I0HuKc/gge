@@ -12,6 +12,9 @@ class Window {
   static int initialize(int width, int height, const char* title);
   static void terminate();
 
+  // установить режим курсора
+  static void setCursorMode(int mode);
+
   // Прослушивание события закрытия окна
   static bool isShouldClose();
 
@@ -20,9 +23,6 @@ class Window {
 
   // Закрыть окно
   static void setShouldClose(bool flag);
-
-  // установить режим курсора
-  static void setCursorMode(int mode);
 };
 
 #endif
