@@ -1,0 +1,38 @@
+#include "Camera.h"
+
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
+
+#include "Window.h"
+
+Camera::Camera(glm::vec3 position, float fov)
+    : position(position), fov(fov), rotation(1.0f) {
+  updateVectors();
+}
+Camera::~Camera() {}
+
+void Camera::updateVectors() {
+  front = glm::vec3(rotation * glm::vec4(0, 0, -1, 1));
+  right = glm::vec3(rotation * glm::vec4(1, 0, 0, 1));
+  up = glm::vec3(rotation * glm::vec4(0, 1, 0, 1));
+}
+
+void Camera::rotate(float x, float y, float z) {
+  rotation = glm::rotate(rotation, z, glm::vec3(0, 0, 1));
+  rotation = glm::rotate(rotation, y, glm::vec3(0, 1, 0));
+  rotation = glm::rotate(rotation, x, glm::vec3(1, 0, 0));
+
+  updateVectors();
+}
+
+glm::mat4 Camera::getProjection() {
+  float aspect = (float)Window::width / (float)Window::height;
+  return glm::perspective(fov, aspect, 0.1f, 100.0f);
+}
+
+glm::mat4 Camera::getView() {
+  // создание матрицы объекта находящ. в определенной точке - направленная на
+  // определенную точку
+  // (позиция камеры, позиция куда смотрит камера, верх камеры)
+  return glm::lookAt(position, position + front, up);
+}
