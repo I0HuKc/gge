@@ -23,6 +23,8 @@ file(GLOB
         "src/window/*.cpp"
         "src/graphics/*.cpp"
         "src/loaders/*.cpp"
+        "src/voxels/*.cpp"
+        "src/lighting/*.cpp"
     )
 
 add_executable(
