@@ -79,29 +79,15 @@ int Events::initialize() {
   return 0;
 }
 
-void Events::pollEvents() {
-  // инкрементирую значение кадра
-  _current++;
-  // обновляю состояние
-  deltaX = 0.0f;
-  deltaY = 0.0f;
-
-  glfwPollEvents();
-}
-
 bool Events::isPressed(int keycode) {
   // Проверяю корректность кода кнопки и что код кнопки не является кодом кнопки
   // мышки
-  if (keycode < 0 || keycode >= _MOUSE_BUTTONS) {
-    return false;
-  }
+  if (keycode < 0 || keycode >= _MOUSE_BUTTONS) return false;
   return _keys[keycode];
 }
 
 bool Events::justPressed(int keycode) {
-  if (keycode < 0 || keycode >= _MOUSE_BUTTONS) {
-    return false;
-  }
+  if (keycode < 0 || keycode >= _MOUSE_BUTTONS) return false;
   // сравниваю номер кадра записанного по этому коду кнопки и текущий кадр
   return _keys[keycode] && _frames[keycode] == _current;
 }
@@ -120,4 +106,14 @@ void Events::toogleCursor() {
   _cursor_locked = !_cursor_locked;
   Window::setCursorMode(_cursor_locked ? GLFW_CURSOR_DISABLED
                                        : GLFW_CURSOR_NORMAL);
+}
+
+void Events::pollEvents() {
+  // инкрементирую значение кадра
+  _current++;
+  // обновляю состояние
+  deltaX = 0.0f;
+  deltaY = 0.0f;
+
+  glfwPollEvents();
 }

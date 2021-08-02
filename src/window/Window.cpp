@@ -50,12 +50,12 @@ void Window::setCursorMode(int mode) {
   glfwSetInputMode(window, GLFW_CURSOR, mode);
 }
 
-bool Window::isShouldClose() { return glfwWindowShouldClose(window); }
+void Window::terminate() { glfwTerminate(); }
 
-void Window::swapBuffers() { glfwSwapBuffers(window); }
+bool Window::isShouldClose() { return glfwWindowShouldClose(window); }
 
 void Window::setShouldClose(bool flag) {
   glfwSetWindowShouldClose(window, flag);
 }
 
-void Window::terminate() { glfwTerminate(); }
+void Window::swapBuffers() { glfwSwapBuffers(window); }
