@@ -7,6 +7,7 @@
 #include <glm/gtx/transform.hpp>
 #include <iostream>
 
+#include "graphics/Mesh.h"
 #include "graphics/Shader.h"
 #include "graphics/Texture.h"
 #include "loaders/PNGLoading.h"
@@ -24,6 +25,8 @@ float vertices[] = {
     1.0f,  -1.0f, 0.0f,  1.0f, 0.0f, 1.0f, 1.0f,  0.0f,
     1.0f,  1.0f,  -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
 };
+
+int attrs[] = {3, 2, 0};
 
 int main(int argc, char const* argv[]) {
   // инициализация окна
@@ -48,30 +51,15 @@ int main(int argc, char const* argv[]) {
     return 1;
   }
 
-  // создаю объект вершинных массивов
-  GLuint VAO, VBO;
-  glGenVertexArrays(1, &VAO);
-  glGenBuffers(1, &VBO);  // создаю вершинный буффер
-
-  glBindVertexArray(VAO);  // назначение вершинного массива
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);  // создание первого вершинного буффера
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-  // (index, длинна вершинного атрибута, тип данных, автоматическая
-  // нормализация, длинна шака вершинных данных, сдвиг вершинного атрибутта)
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat),
-                        (GLvoid*)(0 * sizeof(GLfloat)));
-  glEnableVertexAttribArray(0);  // включение вершинного атрибута
-
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat),
-                        (GLvoid*)(3 * sizeof(GLfloat)));
-  glEnableVertexAttribArray(1);
-
-  glBindVertexArray(0);  // отвязываю объект
+  // создаю объекты вершинных массивов
+  Mesh* mesh = new Mesh(vertices, 6, attrs);
 
   glClearColor(0.6f, 0.62f, 0.65f, 1);
 
   // включаю смешивание для корректной прозрачности
-  glEnable(GL_CULL_FACE);
+  // glEnable(GL_CULL_FACE);
+  glCullFace(GL_BACK);
+  // glEnable(GL_CULL_FACE);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -143,9 +131,7 @@ int main(int argc, char const* argv[]) {
     // привязываю текстуру
     texture->bind();
 
-    glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-    glBindVertexArray(0);
+    mesh->draw(GL_TRIANGLES);
 
     Window::swapBuffers();
     Events::pollEvents();
@@ -154,8 +140,7 @@ int main(int argc, char const* argv[]) {
   // Освобождение всех ресурсов
   delete shader;
   delete texture;
-  glDeleteBuffers(1, &VBO);
-  glDeleteVertexArrays(1, &VAO);
+  delete mesh;
 
   Window::terminate();
   return 0;
